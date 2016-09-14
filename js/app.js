@@ -5,6 +5,7 @@ var Enemy = function(x, y, speed) {
     this.x = x;
     this.y = y;
     this.speed = speed;
+
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
@@ -15,11 +16,15 @@ var Enemy = function(x, y, speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-  if (this.x > 550){
-    this.x = -100;
-  }
-    this.x = this.x + this.speed + (1 * dt);
 
+
+    this.respawn();
+    if(player.victory){// when player wins games
+      // pauses movement of enemies
+      player.victorious();
+    } else {
+    this.x = this.x + this.speed + (1 * dt);//before player wins, move enemies
+    }
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -31,6 +36,13 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.respawn = function() {
+  if (this.x > 550){ //when off canvas, reset position of enemy to move across again
+    this.x = -100;
+  }
+};
+
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -40,11 +52,13 @@ var Player = function(x, y) {
     // Variables applied to each of our instances go here,
     this.x = x;
     this.y = y;
+    var victory;
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
+
 };
 
 // Update the enemy's position, required method for game
@@ -69,16 +83,18 @@ Player.prototype.handleInput = function(key){
   if (key === "up" || key === "down"){
     switch(key) {
       case 'up':
-        if (this.y > -20){
-          this.y = this.y - 80;
+        if (this.y > -20){ // when UP is pressed before last row before boundery
+          this.y = this.y - 80; // move up to next row
+          this.victory = false;
         }
-        if (this.y === -20){
-          console.log('you have won, well done.');
+        if (this.y === -20){ //if last row is reached then the game is won
+          this.victory = true;
         }
         break;
       case 'down':
-        if (this.y < 380){
-          this.y = this.y + 80;
+        if (this.y < 380){ // when DOWN is pressed
+          this.y = this.y + 80; //move to row bellow
+          this.victory = false;
         }
         break;
       default:
@@ -89,52 +105,60 @@ Player.prototype.handleInput = function(key){
   if (key === "left" || key === "right"){
     switch(key) {
       case 'left':
-          if (this.x > 0){
-            this.x = this.x - 100;
+          if (this.x > 0){ // left most boundery
+            this.x = this.x - 100;// move to column to the left
           }
           break;
       case 'right':
-          if (this.x < 400){
-            this.x = this.x + 100;
+          if (this.x < 400){// right most boundery
+            this.x = this.x + 100; //more to column to the right
           }
           break;
       default:
           return;
     }
   }
-
-
-  console.log(key);
-  console.log('x: ' + this.x + ', y: ' + this.y);
 };
 
 Player.prototype.collision = function(){
+
   for(var i = 0; i < allEnemies.length; i++){
+    // conditions to check if any enemy is in the same space as the player
     if (allEnemies[i].x > this.x -80 && allEnemies[i].x < this.x + 80 && allEnemies[i].y === this.y){
-      console.log("craaaaaash");
+
       //resting the player position
-      this.reset();
+      this.reset(); // position player back to  original location
+
+      return true;
     }
   }
+
+
 };
+
+Player.prototype.victorious = function(){
+  ctx.font = "60px Arial";
+  ctx.fillText("YOU WON!!!",70,45);
+};
+
 
 Player.prototype.reset = function(){
   this.x = 200;
   this.y = 380;
 };
 
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [
+var allEnemies = [ //different starting points to randomise enemies
   new Enemy(0, 220, 1),
   new Enemy(-445, 220, 1),
-    new Enemy(-125, 220, 1),
+  new Enemy(-125, 220, 1),
   new Enemy(-100, 140, 2),
   new Enemy(-330, 140, 2),
   new Enemy(-280, 60, 3),
   new Enemy(-570, 60, 3)
-
 ];
 
 player = new Player(200, 380);
