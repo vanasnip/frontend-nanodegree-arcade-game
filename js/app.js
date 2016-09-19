@@ -108,7 +108,6 @@ if (this.victory === false && this.allLivesLost === false){
           return;
     }
   }
-
 }
 };
 
@@ -149,13 +148,13 @@ Player.prototype.victorious = function(){
 Player.prototype.defeat = function(){
   gameOver.x  = 10;
   gameOver.y = 200;
-  //coordinates being image into view
+  //coordinates bring image into view
 };
 
 Player.prototype.reset = function(){
   this.x = 200;
   this.y = 380;
-  //coordinates being player back to starting position
+  //coordinates bring player back to starting position
 
 };
 
@@ -188,16 +187,16 @@ Gem.prototype.spawnGem = function(){
   if (xrando > 0.8){ // deviding xrandom number ranger into 1 of 5 to define this.x (column)
     console.log("x = 0");
     this.x = 0;
-  } if (xrando < 0.8 && xrando > 0.6){ // 2 of 5  columns
+  } if (xrando < 0.8 && xrando > 0.6){ // 2 of 5  x columns
     console.log("x = 100");
     this.x = 100;
-  } if (xrando < 0.6 && xrando > 0.4){ // 3 of 5 columns
+  } if (xrando < 0.6 && xrando > 0.4){ // 3 of 5 x columns
     console.log("x = 200");
     this.x = 200;
-  } if (xrando < 0.4 && xrando > 0.2){ // 4 of 5 columns
+  } if (xrando < 0.4 && xrando > 0.2){ // 4 of 5 x columns
     console.log("x = 300");
     this.x = 300;
-  } if (xrando < 0.2) {// 5 of 5 columns
+  } if (xrando < 0.2) {// 5 of 5 x columns
     this.x = 400;
     console.log("x = 400");
   }
@@ -209,10 +208,6 @@ Gem.prototype.render = function(gemCol) {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.v, this.w);
 };
 
-Gem.prototype.update = function(){
-
-};
-
 var Heart = function(x, y){
   this.x = x;
   this.y = y;
@@ -220,6 +215,7 @@ var Heart = function(x, y){
   this.w = 60; //sets the height of heart drawn on canvas
   this.sprite = 'images/Heart.png';
 };
+
 Heart.prototype.render = function(gemCol) {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, this.v, this.w);
 };
@@ -246,6 +242,7 @@ var GameOver = function(){
 GameOver.prototype.render = function(){
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
 var allEnemies = [ //different starting points to randomise enemies
   new Enemy(0, 220, 1),
   new Enemy(-445, 220, 1),
@@ -258,20 +255,20 @@ var allEnemies = [ //different starting points to randomise enemies
 
 var player = new Player(200, 380);
 
-var allGems = [
+var allGems = [ // different gems colors in array
   new Gem(0),
   new Gem(1),
   new Gem(2)
 ];
 
-var allHearts = [
+var allHearts = [ // 3 hearts representing lives drawn in a row
   new Heart(360, 525),
   new Heart(405, 525),
   new Heart(450, 525)
 ];
 
-var winner = new Winner();
-var gameOver = new GameOver();
+var winner = new Winner(); // initiated when player wins
+var gameOver = new GameOver(); // initiated when player has no more lives
 
 
 
