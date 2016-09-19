@@ -240,7 +240,7 @@ Winner.prototype.render = function(){
 var GameOver = function(){
   this.sprite = 'images/game over.png';
   this.x = 10;
-  this.y = 600; // initially drawn off canvas 
+  this.y = 600; // initially drawn off canvas
 };
 
 GameOver.prototype.render = function(){
